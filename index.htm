@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta name='keywords' content='Web-Based Automatic Hands-Free Talking Twister Spinner'>
+<meta name="description" content="Talking Twister Spinner">
+<link rel='shortcut icon' href='https://Bedno.com/media/twister/spinner.ico'>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta property="og:title" content="Automatic Talking Twister Spinner" />
+<meta property="og:description" content="Web-Based Automatic Hands-Free Talking Twister Spinner" />
+<meta property="og:image" content="https://bedno.com/media/twister/spinner.jpg" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://Bedno.com/media/twister/index.htm" />
+<meta property="og:site_name" content="Automatic Talking Twister Spinner" />
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache" />
+<head>
+<title>Automatic Talking Twister Spinner</title>
+</head>
+<script>
+
+var MasterTimer = null;
+var MasterDur = 10*1000;  // Time between spins in milliseconds.
+var SpeechVoices = null;  var SpeechHandle = null;
+
+function DoSpin () {
+  var SpinLimbNum = 0;  var SpinSideNum = 0;  var SpinColorNum = 0;
+  var SpinLimb = "";  var SpinSide = "";  var SpinColor = "";
+  var SpinText = "";  var SpinImg = "";
+  document.getElementById('DivAbout').style.visibility='hidden';
+  SpinLimbNum = Math.floor(Math.random()*2);
+  SpinSideNum = Math.floor(Math.random()*2);
+  SpinColorNum = Math.floor(Math.random()*4);
+  if (SpinSideNum == 0) { SpinImg = "l"; SpinText = "Left "; } else { SpinImg = "r"; SpinText = "Right "; }
+  if (SpinLimbNum == 0) { SpinImg += "f"; SpinText += "Foot "; } else { SpinImg += "h"; SpinText += "Hand "; }
+  if (SpinColorNum == 0) {
+    SpinText += "Blue";
+    SpinColor = '#0000FF';
+  } else {
+    if (SpinColorNum == 1) {
+      SpinText += "Green";
+      SpinColor = '#00FF00';
+    } else {
+      if (SpinColorNum == 2) {
+        SpinText += "Red";
+        SpinColor = '#FF0000';
+      } else {
+        SpinText += "Yellow";
+        SpinColor = '#FFFF00';
+      }
+    }
+  }
+  document.getElementById("DivBG").style.backgroundColor = SpinColor;
+  document.getElementById("BGimg").src = SpinImg+'.gif';
+  if ('speechSynthesis' in window) {  // If browser is speech capable
+    window.speechSynthesis.cancel();  // Cancel any existing speaking
+    SpeechHandle.text = SpinText;
+    // Speak the passed phrase.
+    window.speechSynthesis.speak(SpeechHandle);
+  }
+  if (MasterTimer!=null) {
+    clearTimeout(MasterTimer);
+    MasterTimer = null;
+  }
+  MasterTimer = setTimeout('DoSpin()',MasterDur);
+}
+
+// Certain keypresses (space/enter/...) do spin.
+function CheckKey (e) {
+  var KeyPressedCode = e.keyCode;
+  if ( (KeyPressedCode == 32) || (KeyPressedCode == 10) || (KeyPressedCode == 13) || (KeyPressedCode == 0) ) { DoSpin(); }
+}
+
+// Configure sound and timer.
+function Setup () {
+  if ('speechSynthesis' in window) {  // If browser is speech capable
+    SpeechHandle = new SpeechSynthesisUtterance();  // Initialize a speech handle
+    // Select voice and other settings.
+    SpeechHandle.voiceURI = 'native';
+    SpeechHandle.volume = 1.0; // 0 to 1
+    SpeechHandle.rate = 1.0; // 0.1 to 10
+    SpeechHandle.pitch = 1.0; // 0 to 2
+    // SpeechHandle.lang = 'en-US';
+  }
+}
+
+</script>
+<body onLoad="Setup();" style="margin-top:0px; margin-left:0px; margin-bottom:0px; margin-right:0px; overflow:hidden;" bgColor='#000000' onKeydown='CheckKey(event);'>
+
+<div id="DivBG" style="z-index:2; position:absolute; left:0px; top:0px; width:100%; height:100%; overflow:hidden;" onClick='DoSpin();'>
+<img id="BGimg" src="spinner.jpg" border=0 width="100%" height="100%">
+</div>
+<div id="DivAbout" style="z-index:50; position:absolute; left:0px; top:0px; width:100%; visibility:visible;">
+<div style="text-align:center; background-color:#FFFFFF; padding:16px 16px 16px 16px; color:#000000; border-style:solid; border-width:4px; border-color:gray; display:inline-block; border-radius:15px; font-family:Arial; color:black; font-size:14pt;">
+<b>Automatic Hands-Free Talking Twister Spinner</b><br>
+Tap or Press a Key to spin.<br>
+More info at <a href="https://Bedno.com/twister" target="about"><b>Bedno.com/twister</b></a>
+</div></div>
+
+</body>
+</html>
+
